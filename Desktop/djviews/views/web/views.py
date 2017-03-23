@@ -1,9 +1,23 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse , Http404
+from django.http import HttpResponse , Http404 , HttpResponseRedirect
 from .models import PostModel
+from .forms import PostModelform
 # Create your views here.
 @login_required(login_url='/login')
+
+
+def post_model_create_view(request):
+    form=PostModelform(request.POST or None)
+    if form.is_valid():
+        obj=form.save(commit=False)
+        obj.save()
+        print(form.cleaned_data)
+        # return HttpResponseRedirect("web/{num}".format(num=obj.id))
+        # why not run correct???
+    template_path = "web/create_view.html"
+    context_dictioanry = {"form":form}
+    return render(request, template_path, context_dictioanry)
 
 def post_model_detail_view(request,id=None):
     # qs=PostModel.objects.get(id=120)
