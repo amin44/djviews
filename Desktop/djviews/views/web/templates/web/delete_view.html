@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Delete {{object.title}}?</h1>
+    <form method="POST" action="."> {% csrf_token %}
+        Are you sure to delete this post?
+        <input type="submit" value="yes">
+        <a href="/web/{{object.id}}/">for cancel click here to go back</a>
+    </form>
+</body>
+</html>

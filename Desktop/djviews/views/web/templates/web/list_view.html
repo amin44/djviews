@@ -5,11 +5,14 @@
     <title>Title</title>
 </head>
 <body>
+    <form method="get" action="/web/">
+        <input type="text" name="q" value="search">
+    </form>
     <h1>this is for unpublic</h1>
-    <!--{{query_list}}-->
-    <!--{{query_list.title}}-->
-    {% for object in query_list %}
-    <li> {{object.title}}</li>
+    {% for object in object_list %}
+    <li>
+        <a href="{{object.id}}/"> {{object.title}}</a>
+    </li>
     {% endfor %}
 </body>
 </html>

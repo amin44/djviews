@@ -6,7 +6,6 @@ from .forms import PostModelform
 # Create your views here.
 @login_required(login_url='/login')
 
-
 def post_model_create_view(request):
     form=PostModelform(request.POST or None)
     if form.is_valid():
@@ -19,6 +18,31 @@ def post_model_create_view(request):
     context_dictioanry = {"form":form}
     return render(request, template_path, context_dictioanry)
 
+# ...................................................................
+
+def post_model_update_view(request,id=None):
+    obj=get_object_or_404(PostModel,id=id)
+    form=PostModelform(request.POST or None, instance=obj)
+    context_dictionary={"object":obj,"form":form}
+    if form.is_valid():
+        obj=form.save(commit=False)
+        obj.save()
+    template_path = "web/create_view.html"
+    return render(request, template_path, context_dictionary)
+
+# ...................................................................
+
+def post_model_delete_view(request,id=None):
+    obj=PostModel.objects.get(id=id)
+    if request.method == "POST":
+        obj.delete()
+        return HttpResponseRedirect("/admin/")
+    template_path = "web/delete_view.html"
+    context_dictioanry={"object":obj}
+    return render(request,template_path,context_dictioanry)
+
+# ...................................................................
+
 def post_model_detail_view(request,id=None):
     # qs=PostModel.objects.get(id=120)
     # if not qs.exists():
@@ -30,15 +54,10 @@ def post_model_detail_view(request,id=None):
     context_dictioanry={"object":obj}
     return render(request,template_path,context_dictioanry)
 
-def post_model_list_view(request):
-    # qs=PostModel.objects.all()
-    # # return HttpResponse("we make def and use web->urls and go to views->urls and map web urls in to /web/ and now we see all views of web")
-    # template_path="web/list_view.html"
-    # context_dictioanry={"query_list":qs}
-    # # but dont show list.title when use query_list???
-    # return render(request,template_path,context_dictioanry)
+# ....................................................................
 
-    print(request.user)
+def post_model_list_view(request):
+    # how to use query for search and Q lookups???
     qs=PostModel.objects.all()
     context={"object_list":qs}
     if request.user.is_authenticated():
@@ -46,3 +65,5 @@ def post_model_list_view(request):
     else:
         template="web/list_view_public.html"
     return render(request,template,context)
+
+# ......................................................................
